@@ -43,6 +43,19 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --color-qq-bg: var(--qq-bg);
+  --color-qq-card: var(--qq-card);
+  --color-qq-text: var(--qq-text);
+  --color-qq-sub: var(--qq-sub);
+  --color-qq-pink: var(--qq-pink);
+}
+
+:root {
+  --qq-bg: oklch(0.16 0.004 285);
+  --qq-card: oklch(0.24 0.005 285);
+  --qq-text: oklch(0.98 0 0);
+  --qq-sub: oklch(0.72 0.004 285);
+  --qq-pink: oklch(0.66 0.21 8);
 }
 
 :root {

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>情侣关系申请书</title>
+    <style>
+      :root {
+        --pink: #ff4d7d;
+        --pink-soft: #ff8aa8;
+        --ink: #2b2126;
+        --ink-soft: #7a6b72;
+        --paper: #fff6f8;
+        --paper-card: #ffffff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+      }
+      body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px 40px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* 飘心背景 */
+      .hearts {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+      .heart {
+        position: absolute;
+        bottom: -40px;
+        width: 14px;
+        height: 14px;
+        background: var(--pink-soft);
+        opacity: 0.45;
+        transform: rotate(-45deg);
+        animation: float-up linear infinite;
+      }
+      .heart::before,
+      .heart::after {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        background: inherit;
+        border-radius: 50%;
+      }
+      .heart::before {
+        top: -7px;
+        left: 0;
+      }
+      .heart::after {
+        top: 0;
+        left: 7px;
+      }
+      @keyframes float-up {
+        0% {
+          transform: translateY(0) rotate(-45deg) scale(0.7);
+          opacity: 0;
+        }
+        15% {
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(-105vh) rotate(-45deg) scale(1.1);
+          opacity: 0;
+        }
+      }
+
+      .sheet {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 420px;
+        background: var(--paper-card);
+        border: 1px solid #ffe0e8;
+        border-radius: 24px;
+        padding: 28px 24px 24px;
+        box-shadow: 0 18px 50px -20px rgba(255, 77, 125, 0.35);
+      }
+
+      .stamp {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: var(--pink);
+        letter-spacing: 0.08em;
+      }
+      .stamp span.line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, #ffd4e0, transparent);
+      }
+
+      h1 {
+        font-family: "STKaiti", "Kaiti SC", "KaiTi", serif;
+        font-size: 30px;
+        line-height: 1.3;
+        margin: 14px 0 4px;
+        text-align: center;
+        letter-spacing: 0.14em;
+      }
+      .sub {
+        text-align: center;
+        font-size: 13px;
+        color: var(--ink-soft);
+        margin-bottom: 22px;
+      }
+
+      .row {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        font-size: 15px;
+        line-height: 1.6;
+        padding: 9px 0;
+        border-bottom: 1px dashed #ffe4ea;
+      }
+      .row .label {
+        color: var(--ink-soft);
+        flex-shrink: 0;
+        font-size: 14px;
+      }
+      .row .value {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      .terms {
+        margin: 20px 0 4px;
+        padding: 16px 16px 14px;
+        background: #fff8fa;
+        border-radius: 16px;
+        border: 1px solid #ffe6ec;
+      }
+      .terms h2 {
+        font-size: 14px;
+        margin: 0 0 10px;
+        color: var(--pink);
+        letter-spacing: 0.05em;
+      }
+      .terms ul {
+        margin: 0;
+        padding-left: 18px;
+        font-size: 14px;
+        line-height: 1.75;
+        color: #56474e;
+      }
+      .terms li {
+        margin-bottom: 4px;
+      }
+
+      .actions {
+        margin-top: 22px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+        border: none;
+        border-radius: 999px;
+        padding: 14px 26px;
+        font-size: 16px;
+        font-weight: 600;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+      }
+      .yes {
+        background: var(--pink);
+        color: #fff;
+        box-shadow: 0 10px 24px -10px rgba(255, 77, 125, 0.9);
+        flex: 1;
+      }
+      .yes:hover {
+        transform: translateY(-2px) scale(1.02);
+      }
+      .no {
+        background: #f4eef0;
+        color: var(--ink-soft);
+        position: relative;
+      }
+
+      .result {
+        display: none;
+        text-align: center;
+        padding: 8px 0 0;
+      }
+      .result.show {
+        display: block;
+        animation: pop 0.45s ease both;
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .result .big {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--pink);
+        margin-bottom: 6px;
+      }
+      .result .small {
+        font-size: 14px;
+        color: var(--ink-soft);
+        line-height: 1.7;
+      }
+      .foot {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 12px;
+        color: #b9a7ae;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .heart {
+          animation: none;
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+    <main class="sheet">
+      <div class="stamp">
+        <span>NO.0520</span>
+        <span class="line"></span>
+        <span>仅此一份</span>
+      </div>
+
+      <h1>情侣关系申请书</h1>
+      <p class="sub">请认真阅读以下条款后，作出你的选择</p>
+
+      <div class="row">
+        <span class="label">申请人</span><span class="value">我</span>
+      </div>
+      <div class="row">
+        <span class="label">受理人</span><span class="value">你</span>
+      </div>
+      <div class="row">
+        <span class="label">申请事项</span><span class="value">建立唯一且长期有效的情侣关系</span>
+      </div>
+      <div class="row">
+        <span class="label">有效期限</span><span class="value">自你同意之日起，长期有效</span>
+      </div>
+
+      <section class="terms">
+        <h2>甲方（我）承诺条款</h2>
+        <ul>
+          <li>每日按时报备行程，不让你猜。</li>
+          <li>吵架不超过一晚，先低头的永远是我。</li>
+          <li>你的备注永远置顶，聊天记录一条不删。</li>
+          <li>负责搞笑、投喂、暖手与拎包。</li>
+          <li>让 QQ 帮我们记录每日点滴，直到情侣等级满级。</li>
+        </ul>
+      </section>
+
+      <div class="actions" id="actions">
+        <button class="yes" id="yes">我同意，在一起</button>
+        <button class="no" id="no">再想想</button>
+      </div>
+
+      <div class="result" id="result" role="status" aria-live="polite">
+        <div class="big">申请已通过</div>
+        <div class="small">从现在起，我们的情侣关系正式生效。<br />请多多指教，往后余生请你签收。</div>
+      </div>
+
+      <p class="foot">本申请书一经同意，不可撤回</p>
+    </main>
+
+    <script>
+      // 背景飘心
+      const wrap = document.getElementById("hearts")
+      for (let i = 0; i < 18; i++) {
+        const h = document.createElement("i")
+        h.className = "heart"
+        h.style.left = Math.random() * 100 + "%"
+        h.style.animationDuration = 7 + Math.random() * 7 + "s"
+        h.style.animationDelay = -Math.random() * 10 + "s"
+        const s = 0.6 + Math.random() * 1.1
+        h.style.width = h.style.height = 14 * s + "px"
+        wrap.appendChild(h)
+      }
+
+      // 「再想想」按钮会躲开
+      const no = document.getElementById("no")
+      const texts = ["再想想", "真的吗？", "别点这里", "我不同意你拒绝", "点左边那个啦"]
+      let idx = 0
+      const dodge = () => {
+        idx = Math.min(idx + 1, texts.length - 1)
+        no.textContent = texts[idx]
+        const dx = (Math.random() - 0.5) * 90
+        const dy = (Math.random() - 0.5) * 50
+        no.style.transform = `translate(${dx}px, ${dy}px) scale(${Math.max(0.6, 1 - idx * 0.1)})`
+      }
+      no.addEventListener("mouseenter", dodge)
+      no.addEventListener("click", (e) => {
+        e.preventDefault()
+        dodge()
+      })
+
+      // 同意
+      document.getElementById("yes").addEventListener("click", () => {
+        document.getElementById("actions").style.display = "none"
+        document.getElementById("result").classList.add("show")
+        for (let i = 0; i < 24; i++) {
+          const h = document.createElement("i")
+          h.className = "heart"
+          h.style.left = 20 + Math.random() * 60 + "%"
+          h.style.animationDuration = 2.5 + Math.random() * 2 + "s"
+          h.style.opacity = "0.8"
+          h.style.width = h.style.height = 12 + Math.random() * 16 + "px"
+          wrap.appendChild(h)
+        }
+        try {
+          window.parent.postMessage({ type: "love-accepted" }, "*")
+        } catch (err) {}
+      })
+    </script>
+  </body>
+</html>
