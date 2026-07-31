@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f5f6" />
+    <title>想和你建立情侣关系</title>
+    <style>
+      /* ============================================================
+         配色变量（想换颜色改这里就行）
+         ============================================================ */
+      :root {
+        --bg: #f5f5f6;
+        --card: #ffffff;
+        --text: #26262a;
+        --sub: #7c7c85;
+        --line: #e7e7ea;
+        --pink: #ff4d7d;
+        --pink-soft: #ff8aa8;
+        --paper: #fff6f8;
+        --ink: #2b2126;
+        --ink-soft: #7a6b72;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+      }
+
+      /* ============================================================
+         一、封面卡片（QQ 风格）
+         ============================================================ */
+      .cover {
+        width: 100%;
+        max-width: 420px;
+      }
+      .qq-card {
+        display: block;
+        width: 100%;
+        text-align: left;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 20px 20px 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .qq-card:hover {
+        transform: scale(1.015);
+        box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.18);
+      }
+      .qq-card:focus-visible {
+        outline: 2px solid var(--pink);
+        outline-offset: 2px;
+      }
+      .qq-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .qq-text {
+        flex: 1;
+        min-width: 0;
+      }
+      .qq-title {
+        margin: 0 0 8px;
+        font-size: 21px;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+      }
+      .qq-desc {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--sub);
+      }
+      .qq-icon {
+        flex-shrink: 0;
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #ff5f8f, #ff2e6a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px -8px rgba(255, 46, 106, 0.7);
+      }
+      .qq-icon svg {
+        width: 40px;
+        height: 40px;
+        color: #fff;
+      }
+      .qq-foot {
+        margin-top: 22px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        color: var(--sub);
+      }
+      .qq-foot .go {
+        color: var(--pink);
+        font-weight: 600;
+      }
+
+      /* ============================================================
+         二、点击后的浮层 + 情侣关系申请书
+         ============================================================ */
+      .overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        background: rgba(38, 38, 42, 0.4);
+        backdrop-filter: blur(4px);
+        padding: 12px;
+        align-items: center;
+        justify-content: center;
+      }
+      .overlay.show {
+        display: flex;
+        animation: fade 0.25s ease both;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .modal {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 420px;
+        height: 100%;
+        max-height: 100%;
+        overflow: hidden;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.4);
+      }
+      .modal-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--line);
+        flex-shrink: 0;
+      }
+      .modal-bar p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .close {
+        border: none;
+        background: transparent;
+        color: var(--sub);
+        cursor: pointer;
+        border-radius: 999px;
+        padding: 6px;
+        line-height: 0;
+      }
+      .close:hover {
+        background: var(--bg);
+        color: var(--text);
+      }
+      .close svg {
+        width: 20px;
+        height: 20px;
+      }
+      .scroll {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        background: var(--paper);
+        padding: 24px 16px 40px;
+        position: relative;
+      }
+
+      /* 飘心背景 */
+      .hearts {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+      .heart {
+        position: absolute;
+        bottom: -40px;
+        width: 14px;
+        height: 14px;
+        background: var(--pink-soft);
+        opacity: 0.45;
+        transform: rotate(-45deg);
+        animation: float-up linear infinite;
+      }
+      .heart::before,
+      .heart::after {
+        content: "";
+        position: absolute;
+        width: inherit;
+        height: inherit;
+        background: inherit;
+        border-radius: 50%;
+      }
+      .heart::before {
+        top: -50%;
+        left: 0;
+      }
+      .heart::after {
+        top: 0;
+        left: 50%;
+      }
+      @keyframes float-up {
+        0% {
+          transform: translateY(0) rotate(-45deg) scale(0.7);
+          opacity: 0;
+        }
+        15% {
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(-120vh) rotate(-45deg) scale(1.1);
+          opacity: 0;
+        }
+      }
+
+      .sheet {
+        position: relative;
+        z-index: 1;
+        margin: 0 auto;
+        max-width: 380px;
+        background: #fff;
+        border: 1px solid #ffe0e8;
+        border-radius: 20px;
+        padding: 26px 22px 22px;
+        box-shadow: 0 18px 50px -24px rgba(255, 77, 125, 0.35);
+        color: var(--ink);
+      }
+      .stamp {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+        color: var(--pink);
+        letter-spacing: 0.08em;
+      }
+      .stamp .line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, #ffd4e0, transparent);
+      }
+      .sheet h1 {
+        font-family: "STKaiti", "Kaiti SC", "KaiTi", serif;
+        font-size: 28px;
+        line-height: 1.3;
+        margin: 14px 0 4px;
+        text-align: center;
+        letter-spacing: 0.14em;
+      }
+      .sheet .sub {
+        text-align: center;
+        font-size: 13px;
+        color: var(--ink-soft);
+        margin: 0 0 20px;
+      }
+      .row {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        font-size: 15px;
+        line-height: 1.6;
+        padding: 9px 0;
+        border-bottom: 1px dashed #ffe4ea;
+      }
+      .row .label {
+        color: var(--ink-soft);
+        flex-shrink: 0;
+        font-size: 14px;
+      }
+      .row .value {
+        font-weight: 600;
+      }
+      .terms {
+        margin: 20px 0 4px;
+        padding: 16px 16px 14px;
+        background: #fff8fa;
+        border-radius: 14px;
+        border: 1px solid #ffe6ec;
+      }
+      .terms h2 {
+        font-size: 14px;
+        margin: 0 0 10px;
+        color: var(--pink);
+        letter-spacing: 0.05em;
+      }
+      .terms ul {
+        margin: 0;
+        padding-left: 18px;
+        font-size: 14px;
+        line-height: 1.75;
+        color: #56474e;
+      }
+      .actions {
+        margin-top: 22px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+      }
+      .actions button {
+        font: inherit;
+        cursor: pointer;
+        border: none;
+        border-radius: 999px;
+        padding: 13px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        transition: transform 0.18s ease;
+      }
+      .yes {
+        background: var(--pink);
+        color: #fff;
+        flex: 1;
+        box-shadow: 0 10px 24px -10px rgba(255, 77, 125, 0.9);
+      }
+      .yes:hover {
+        transform: translateY(-2px) scale(1.02);
+      }
+      .no {
+        background: #f4eef0;
+        color: var(--ink-soft);
+      }
+      .result {
+        display: none;
+        text-align: center;
+        padding-top: 8px;
+      }
+      .result.show {
+        display: block;
+        animation: pop 0.45s ease both;
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .result .big {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--pink);
+        margin-bottom: 6px;
+      }
+      .result .small {
+        font-size: 14px;
+        color: var(--ink-soft);
+        line-height: 1.7;
+      }
+      .foot {
+        margin: 18px 0 0;
+        text-align: center;
+        font-size: 12px;
+        color: #b9a7ae;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .heart {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ========== 封面卡片 ========== -->
+    <main class="cover">
+      <button class="qq-card" id="open" aria-haspopup="dialog">
+        <div class="qq-top">
+          <div class="qq-text">
+            <h1 class="qq-title">想和你建立情侣关系</h1>
+            <p class="qq-desc">和我成为情侣，让QQ帮我们记录每日点滴</p>
+          </div>
+          <div class="qq-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="currentColor">
+              <path
+                d="M17.5 10c-4.7 0-8.5 3.7-8.5 8.3 0 7 8.9 13 11.9 15.1.9.6 2.1.6 3 0 1.3-.9 3.8-2.7 6-5.1-3.4-3-7.4-7.2-7.4-11.8 0-2.6 1-4.9 2.7-6.5-2.1 0-2.4 0-2.6 0-1.8 0-3.5.7-4.8 1.9C18.7 10.7 18.1 10 17.5 10z"
+                opacity=".9"
+              />
+              <path
+                d="M31.5 12c-2.2 0-4.2.9-5.5 2.4C24.7 12.9 22.7 12 20.5 12 16.4 12 13 15.3 13 19.4c0 6.9 9.6 13.3 12.1 14.9.5.3 1.2.3 1.7 0C29.4 32.7 39 26.3 39 19.4 39 15.3 35.6 12 31.5 12z"
+              />
+            </svg>
+          </div>
+        </div>
+        <div class="qq-foot">
+          <span>其他来源</span>
+          <span class="go">点击查看 &rsaquo;</span>
+        </div>
+      </button>
+    </main>
+
+    <!-- ========== 浮层：情侣关系申请书 ========== -->
+    <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="情侣关系申请书">
+      <div class="modal">
+        <div class="modal-bar">
+          <p>情侣关系申请书</p>
+          <button class="close" id="close" aria-label="关闭">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="scroll">
+          <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+          <section class="sheet">
+            <div class="stamp">
+              <span>NO.0520</span>
+              <span class="line"></span>
+              <span>仅此一份</span>
+            </div>
+
+            <h1>情侣关系申请书</h1>
+            <p class="sub">请认真阅读以下条款后，作出你的选择</p>
+
+            <div class="row"><span class="label">申请人</span><span class="value">我</span></div>
+            <div class="row"><span class="label">受理人</span><span class="value">你</span></div>
+            <div class="row">
+              <span class="label">申请事项</span><span class="value">建立唯一且长期有效的情侣关系</span>
+            </div>
+            <div class="row">
+              <span class="label">有效期限</span><span class="value">自你同意之日起，长期有效</span>
+            </div>
+
+            <div class="terms">
+              <h2>甲方（我）承诺条款</h2>
+              <ul>
+                <li>每日按时报备行程，不让你猜。</li>
+                <li>吵架不超过一晚，先低头的永远是我。</li>
+                <li>你的备注永远置顶，聊天记录一条不删。</li>
+                <li>负责搞笑、投喂、暖手与拎包。</li>
+                <li>让 QQ 帮我们记录每日点滴，直到情侣等级满级。</li>
+              </ul>
+            </div>
+
+            <div class="actions" id="actions">
+              <button class="yes" id="yes">我同意，在一起</button>
+              <button class="no" id="no">再想想</button>
+            </div>
+
+            <div class="result" id="result" role="status" aria-live="polite">
+              <div class="big">申请已通过</div>
+              <div class="small">从现在起，我们的情侣关系正式生效。<br />请多多指教，往后余生请你签收。</div>
+            </div>
+
+            <p class="foot">本申请书一经同意，不可撤回</p>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const overlay = document.getElementById("overlay")
+      const wrap = document.getElementById("hearts")
+
+      // 打开 / 关闭浮层
+      document.getElementById("open").addEventListener("click", () => {
+        overlay.classList.add("show")
+        document.body.style.overflow = "hidden"
+      })
+      const close = () => {
+        overlay.classList.remove("show")
+        document.body.style.overflow = ""
+      }
+      document.getElementById("close").addEventListener("click", close)
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) close()
+      })
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") close()
+      })
+
+      // 背景飘心
+      for (let i = 0; i < 18; i++) {
+        const h = document.createElement("i")
+        h.className = "heart"
+        h.style.left = Math.random() * 100 + "%"
+        h.style.animationDuration = 7 + Math.random() * 7 + "s"
+        h.style.animationDelay = -Math.random() * 10 + "s"
+        const s = 0.6 + Math.random() * 1.1
+        h.style.width = h.style.height = 14 * s + "px"
+        wrap.appendChild(h)
+      }
+
+      // 「再想想」按钮会躲开
+      const no = document.getElementById("no")
+      const texts = ["再想想", "真的吗？", "别点这里", "我不同意你拒绝", "点左边那个啦"]
+      let idx = 0
+      const dodge = () => {
+        idx = Math.min(idx + 1, texts.length - 1)
+        no.textContent = texts[idx]
+        const dx = (Math.random() - 0.5) * 90
+        const dy = (Math.random() - 0.5) * 50
+        no.style.transform = "translate(" + dx + "px," + dy + "px) scale(" + Math.max(0.6, 1 - idx * 0.1) + ")"
+      }
+      no.addEventListener("mouseenter", dodge)
+      no.addEventListener("click", (e) => {
+        e.preventDefault()
+        dodge()
+      })
+
+      // 同意
+      document.getElementById("yes").addEventListener("click", () => {
+        document.getElementById("actions").style.display = "none"
+        document.getElementById("result").classList.add("show")
+        for (let i = 0; i < 24; i++) {
+          const h = document.createElement("i")
+          h.className = "heart"
+          h.style.left = 20 + Math.random() * 60 + "%"
+          h.style.animationDuration = 2.5 + Math.random() * 2 + "s"
+          h.style.opacity = "0.8"
+          h.style.width = h.style.height = 12 + Math.random() * 16 + "px"
+          wrap.appendChild(h)
+        }
+      })
+    </script>
+  </body>
+</html>
