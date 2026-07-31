@@ -2,10 +2,40 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : 'http://localhost:3000'
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: '想和你建立情侣关系',
   description: '和我成为情侣，让QQ帮我们记录每日点滴',
   generator: 'v0.app',
+  openGraph: {
+    type: 'website',
+    locale: 'zh_CN',
+    url: siteUrl,
+    siteName: '情侣空间',
+    title: '想和你建立情侣关系',
+    description: '和我成为情侣，让QQ帮我们记录每日点滴',
+    images: [
+      {
+        url: '/og-couple.png',
+        width: 1024,
+        height: 1024,
+        alt: '情侣关系邀请',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: '想和你建立情侣关系',
+    description: '和我成为情侣，让QQ帮我们记录每日点滴',
+    images: ['/og-couple.png'],
+  },
+  other: {
+    'og:image:type': 'image/png',
+  },
   icons: {
     icon: [
       {
