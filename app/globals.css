@@ -48,14 +48,18 @@
   --color-qq-text: var(--qq-text);
   --color-qq-sub: var(--qq-sub);
   --color-qq-pink: var(--qq-pink);
+  --color-qq-on-pink: var(--qq-on-pink);
+  --color-qq-line: var(--qq-line);
 }
 
 :root {
-  --qq-bg: oklch(0.16 0.004 285);
-  --qq-card: oklch(0.24 0.005 285);
-  --qq-text: oklch(0.98 0 0);
-  --qq-sub: oklch(0.72 0.004 285);
+  --qq-bg: oklch(0.965 0.002 285);
+  --qq-card: oklch(1 0 0);
+  --qq-text: oklch(0.21 0.005 285);
+  --qq-sub: oklch(0.55 0.006 285);
   --qq-pink: oklch(0.66 0.21 8);
+  --qq-on-pink: oklch(1 0 0);
+  --qq-line: oklch(0.91 0.003 285);
 }
 
 :root {

@@ -53,7 +53,7 @@ export function QqCoupleCover() {
           type="button"
           onClick={() => setOpen(true)}
           aria-haspopup="dialog"
-          className="group w-full rounded-2xl bg-qq-card px-5 pb-4 pt-5 text-left transition-transform duration-200 hover:scale-[1.015] focus:outline-none focus-visible:ring-2 focus-visible:ring-qq-pink"
+          className="group w-full rounded-2xl border border-qq-line bg-qq-card px-5 pb-4 pt-5 text-left shadow-sm transition-all duration-200 hover:scale-[1.015] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-qq-pink"
         >
           <div className="flex items-start gap-4">
             <div className="min-w-0 flex-1">
@@ -63,11 +63,11 @@ export function QqCoupleCover() {
               </p>
             </div>
             <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-qq-pink shadow-lg shadow-qq-pink/30">
-              <CoupleIcon className="size-10 text-qq-text" />
+              <CoupleIcon className="size-10 text-qq-on-pink" />
             </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-3">
+          <div className="mt-6 flex items-center justify-between border-t border-qq-line pt-3">
             <span className="text-sm text-qq-sub/80">其他来源</span>
             <span className="text-sm text-qq-pink opacity-0 transition-opacity duration-200 group-hover:opacity-100">
               点击查看
@@ -86,15 +86,15 @@ export function QqCoupleCover() {
           role="dialog"
           aria-modal="true"
           aria-label="情侣关系申请书"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-qq-bg/90 p-3 backdrop-blur-sm sm:p-6"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-qq-text/40 p-3 backdrop-blur-sm sm:p-6"
         >
-          <div className="relative flex h-full w-full max-w-md flex-col overflow-hidden rounded-2xl bg-qq-card shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
+          <div className="relative flex h-full w-full max-w-md flex-col overflow-hidden rounded-2xl border border-qq-line bg-qq-card shadow-2xl">
+            <div className="flex items-center justify-between border-b border-qq-line px-4 py-3">
               <span className="text-sm font-medium text-qq-text">情侣关系申请书</span>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-full p-1.5 text-qq-sub transition-colors hover:bg-white/10 hover:text-qq-text"
+                className="rounded-full p-1.5 text-qq-sub transition-colors hover:bg-qq-bg hover:text-qq-text"
               >
                 <X className="size-4" />
                 <span className="sr-only">关闭</span>
